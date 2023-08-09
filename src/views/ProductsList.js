@@ -12,7 +12,7 @@ function ProductsList() {
 
   useEffect(() => {
     // Make the Axios request with the 'Accept' header set to 'application/json'
-    axios.get('http://localhost:4000/products', {
+    axios.get('http://54.174.115.213:3000/products', {
       headers: {
         'Accept': 'application/json'
       }
@@ -29,7 +29,7 @@ function ProductsList() {
 
   const handleDelete = (id) => {
     // Make the Axios request to delete the product
-    axios.delete(`http://localhost:4000/products/${id}`, {
+    axios.delete(`http://54.174.115.213:3000/products/${id}`, {
       headers: {
         'Accept': 'application/json'
       }
@@ -46,7 +46,7 @@ function ProductsList() {
 
   const handleUpdate = (id) => {
     // Make the Axios request to update the product
-    axios.put(`http://localhost:4000/products/${id}`, updatedProductData, {
+    axios.put(`http://54.174.115.213:3000/products${id}`, updatedProductData, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

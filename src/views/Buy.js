@@ -6,7 +6,7 @@ function Buy() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:4000/products', {
+        const response = await fetch('http://54.174.115.213:3000/products', {
           headers: {
             'Accept': 'application/json'
           }

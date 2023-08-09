@@ -24,7 +24,7 @@ function Sell() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:4000/products',
+        'http://54.174.115.213:3000/products',
         { name, description, price: parseFloat(price) }, 
         { headers: { Accept: 'application/json' } }
       );
