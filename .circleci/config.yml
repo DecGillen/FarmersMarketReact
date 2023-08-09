@@ -11,44 +11,30 @@ workflows:
 
 jobs:
   build:
-    working_directory: ~/farmersmarketr
+    working_directory: ~/FarmersMarket
     docker:
-      - image: circleci/node:14 # Updated to a more recent Node.js version
+      - image: circleci/node:14 # Use a Node.js image for building React app
     steps:
       - checkout
-      - setup_remote_docker
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: install-npm-wee
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
+      - setup_remote_docker 
       - run:
           name: docker-login
           command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run:
-          name: Build Docker Image
+          name: build-docker-image
           command: docker build -t $IMAGE_NAME:latest .
       - run:
-          name: Publish Docker Image
+          name: publish-docker-image
           command: docker push $IMAGE_NAME
-      - run:    
-          name: build-docker-image-for-integraton-environment
-          command: docker create -p 8443:8443 --name integration_app $IMAGE_NAME
       - run:
-          name: copy-server-cert-and-private-key-across
-          command: docker cp ./privatekey.pem integration_app:/privatekey.pem; docker cp ./server.crt integration_app:/server.crt
-      - run:    
-          name: start-docker-container
-          command: docker start integration_app
+          name: run-docker-image
+          command: docker run -p 3000:3000 -d $IMAGE_NAME # Run React app on port 3000
+
 
   deploy:
     docker:
-      - image: circleci/node:14 # Updated to a more recent Node.js version
+      - image: circleci/node:14 # Use Node.js image for deployment
     steps:
       - run:
           name: deploy-application
-          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "npm remove FarmersMarketReact/node_modules; npm remove FarmersMarketReact/package-lock.json; export SERVER=/$SERVER; export PRIVATE_KEY=/$PRIVATE_KEY; sudo rm -rf FarmersMarketReact/; git clone https://github.com/DecGillen/FarmersMarketReact.git; source FarmersMarketReact/deploy.sh"
+          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "export CONTAINER_NAME=\"$CONTAINER_NAME\"; export IMAGE_NAME=\"$IMAGE_NAME\"; sudo rm -rf FarmersMarket/; git clone https://github.com/DecGillen/FarmersMarket; source FarmersMarket/deploy.sh"
