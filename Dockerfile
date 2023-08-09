@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the app files
 COPY . .
 
-# Expose the port that the app will run on (React's default is 3000)
+# Expose the port that the app will run on 
 EXPOSE 8080
 
 # Define the command to start the app

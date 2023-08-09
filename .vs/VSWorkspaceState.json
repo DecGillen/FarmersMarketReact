@@ -1,12 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\.circleci",
     "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\images",
     "\\src\\views"
   ],
-  "SelectedNode": "\\src\\components\\Navbar.js",
+  "SelectedNode": "\\src\\App.js",
   "PreviewInSolutionExplorer": false
 }
