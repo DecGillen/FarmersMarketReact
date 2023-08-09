@@ -11,7 +11,7 @@ workflows:
 
 jobs:
   build:
-    working_directory: ~/FarmersMarket
+    working_directory: ~/FarmersMarketReact
     docker:
       - image: circleci/node:14 # Use a Node.js image for building React app
     steps:
@@ -37,4 +37,4 @@ jobs:
     steps:
       - run:
           name: deploy-application
-          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "export CONTAINER_NAME=\"$CONTAINER_NAME\"; export IMAGE_NAME=\"$IMAGE_NAME\"; sudo rm -rf FarmersMarket/; git clone https://github.com/DecGillen/FarmersMarket; source FarmersMarket/deploy.sh"
+          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "export CONTAINER_NAME=\"$CONTAINER_NAME\"; export IMAGE_NAME=\"$IMAGE_NAME\"; sudo rm -rf FarmersMarketReact/; git clone https://github.com/DecGillen/FarmersMarketReact; source FarmersMarketReact/deploy.sh"
