@@ -14,4 +14,4 @@ if [ -n "$CONTAINER_EXISTS" ]; then
   sudo docker rm "$CONTAINER_NAME"
 fi
 
-sudo docker run -p 8443:8443 -d --name "$CONTAINER_NAME" "$IMAGE_NAME"
+sudo docker run -p 8080:8080 -d --name "$CONTAINER_NAME" "$IMAGE_NAME"
