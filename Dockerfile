@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install the app's dependencies
-RUN npm install
+RUN sudo npm install
 
 # Copy the rest of the app files
 COPY . .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # Define the command to start the app
-CMD [ "npm", "start" ]
+CMD ["sudo", "npm", "start" ]
