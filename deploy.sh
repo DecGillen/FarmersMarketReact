@@ -1,15 +1,17 @@
 #!/bin/bash
 
-sudo apt update && sudo apt install nodejs npm
+CURRENT_INSTANCE=$(sudo docker ps -a -q --filter ancestor="$IMAGE_NAME" --format="{{.ID}}")
 
-sudo npm install -g pm2
+if [ -n "$CURRENT_INSTANCE" ]; then 
+  sudo docker stop "$CURRENT_INSTANCE"
+  sudo docker rm "$CURRENT_INSTANCE"
+fi
 
-pm2 stop farmersmarketr
+sudo docker pull "$IMAGE_NAME"
 
-cd DevOpsSec/
+CONTAINER_EXISTS=$(sudo docker ps -a | grep "$CONTAINER_NAME")
+if [ -n "$CONTAINER_EXISTS" ]; then 
+  sudo docker rm "$CONTAINER_NAME"
+fi
 
-npm install
-echo $PRIVATE_KEY > privatekey.pem
-echo $SERVER > server.crt
-
-pm2 start ./bin/www --name farmersmarketr
+sudo docker run -p 8443:8443 -d --name "$CONTAINER_NAME" "$IMAGE_NAME"
