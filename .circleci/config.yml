@@ -1,0 +1,61 @@
+version: 2.1
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+
+jobs:
+  build:
+    working_directory: ~/farmersmarketr
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@5'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-npm-wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: docker-login
+          command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Build Docker Image
+          command: docker build -t $IMAGE_NAME:latest .
+      - run:
+          name: Publish Docker Image
+          command: docker push $IMAGE_NAME
+      - run:
+          name: set-environment-variables
+          command: echo $SERVER > server.crt && echo $PRIVATE_KEY > privatekey.pem
+      - run:
+          name: build-docker-image-for-integraton-environment
+          command: docker create -p 8443:8443 --name integration_app $IMAGE_NAME
+      - run:
+          name: copy-server-cert-and-private-key-across
+          command: docker cp ./privatekey.pem integration_app:/privatekey.pem; docker cp ./server.crt integration_app:/server.crt
+      - run:    
+          name: start-docker-container
+          command: docker start integration_app
+       
+
+  deploy:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - run:
+          name: deploy-application
+          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "npm remove DevOpsSec/node_modules;npm remove DevOpsSec/package-lock.json; export SERVER=/$SERVER; export PRIVATE_KEY=/$PRIVATE_KEY; sudo rm -rf DevOpsSec/;GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -i ~/.ssh/DevOpsSec-git\" git clone git@github.com:DecGillen/FarmersMarketReact.git; source farmersmarketr/deploy.sh"
