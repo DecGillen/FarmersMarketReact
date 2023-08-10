@@ -41,7 +41,7 @@ function ProductsList() {
   };
 
   const handleUpdate = (id) => {
-    axios.put(`http://54.174.115.213:3000/products${id}`, updatedProductData, {
+    axios.put(`http://54.174.115.213:3000/products/${id}`, updatedProductData, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

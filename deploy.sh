@@ -14,4 +14,4 @@ if [ -n "$CONTAINER_EXISTS" ]; then
   sudo docker rm "$CONTAINER_NAME"
 fi
 
-sudo docker run -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -d --name "$CONTAINER_NAME" "$IMAGE_NAME"
+sudo docker run -p 8080:8080 --network host -v /var/run/docker.sock:/var/run/docker.sock -d --name "$CONTAINER_NAME" "$IMAGE_NAME"
