@@ -13,7 +13,7 @@ jobs:
   build:
     working_directory: ~/FarmersMarketReact
     docker:
-      - image: circleci/node:14 # Use a Node.js image for building React app
+      - image: circleci/node:14
     steps:
       - checkout
       - setup_remote_docker 
@@ -35,7 +35,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:14 # Use Node.js image for deployment
+      - image: circleci/node:14
     steps:
       - run:
           name: deploy-application

@@ -28,7 +28,7 @@ function Buy() {
 
   return (
     <div>
-      <h1>Please Peruse our Produce!</h1>
+      <h1>Buy</h1>
       <div>
         {productsData.map(product => (
           <div key={product.id}>

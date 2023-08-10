@@ -11,41 +11,36 @@ function ProductsList() {
   });
 
   useEffect(() => {
-    // Make the Axios request with the 'Accept' header set to 'application/json'
     axios.get('http://54.174.115.213:3000/products', {
       headers: {
         'Accept': 'application/json'
       }
     })
       .then(response => {
-        // Handle the JSON response here
         setProducts(response.data);
       })
       .catch(error => {
-        // Handle the error
+        // error handling
         console.error(error);
       });
   }, []);
 
   const handleDelete = (id) => {
-    // Make the Axios request to delete the product
     axios.delete(`http://54.174.115.213:3000/products/${id}`, {
       headers: {
         'Accept': 'application/json'
       }
     })
       .then(response => {
-        // Filter out the deleted product from the state
+        // filter out the deleted items and show the remaining ones
         setProducts(prevProducts => prevProducts.filter(product => product.id !== id));
       })
       .catch(error => {
-        // Handle the error
         console.error(error);
       });
   };
 
   const handleUpdate = (id) => {
-    // Make the Axios request to update the product
     axios.put(`http://54.174.115.213:3000/products${id}`, updatedProductData, {
       headers: {
         'Accept': 'application/json',
@@ -64,7 +59,6 @@ function ProductsList() {
         });
       })
       .catch(error => {
-        // Handle the error
         console.error(error);
       });
   };
@@ -79,7 +73,7 @@ function ProductsList() {
 
   const toggleEditMode = (id) => {
     setEditProductId(id);
-    // Populate the input fields with the current product data when entering edit mode
+    // this should show the current fata as placeholder text
     const productToEdit = products.find(product => product.id === id);
     if (productToEdit) {
       setUpdatedProductData({
